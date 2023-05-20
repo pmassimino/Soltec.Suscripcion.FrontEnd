@@ -5,6 +5,7 @@ import { Plan } from '../../models/model';
 import PlanForm from './forms';
 import Layout from '@/componets/Layout';
 import { withAuth } from '@/componets/withAuth/withAuth';
+import BackEndError, { ErrorItem } from '@/utils/errors';
 
 interface EditProps {
   id: string;
@@ -14,6 +15,7 @@ const PlanEdit = ({ id }: EditProps) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initialValues, setInitialValues] = useState<Plan>();
+  const [errorList, setErrorList] = useState<ErrorItem[]>([]);
 
   useEffect(() => {
     const apiUrl = process.env.API_URL ?? '';
@@ -24,8 +26,8 @@ const PlanEdit = ({ id }: EditProps) => {
         const plan = await apiService.get<Plan>(`/plan/${id}`);
         setInitialValues(plan);
       } catch (error) {
-        // Manejo del error        
-        console.error(error);
+        if (error instanceof BackEndError)            
+      setErrorList(error.errors);  
       }
     };
     fetchEntity();
@@ -54,7 +56,7 @@ const PlanEdit = ({ id }: EditProps) => {
     <>
       <Layout title='Editar plan'>
         <h1>Editar plan</h1>
-        <PlanForm entity={initialValues} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+        <PlanForm entity={initialValues} onSubmit={handleSubmit} isSubmitting={isSubmitting} errorList={errorList} />
       </Layout>
     </>
   );

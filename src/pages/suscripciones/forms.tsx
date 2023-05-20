@@ -1,6 +1,7 @@
 import { useState, useEffect, RefCallback, useCallback } from 'react';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
 import { Plan, Sujeto, Suscripcion } from '../../models/model';
+import { ErrorItem } from '@/utils/errors';
 
 interface Props {
   onSubmit: (entity: Suscripcion) => Promise<void>;
@@ -8,9 +9,10 @@ interface Props {
   entity?: Suscripcion;
   planes?:Plan[];
   sujetos?:Sujeto[];
+  errorList:ErrorItem[];
 }
 
-const SuscripcionForm = ({ onSubmit, isSubmitting, entity,planes,sujetos }: Props) => {
+const SuscripcionForm = ({ onSubmit, isSubmitting, entity,planes,sujetos,errorList }: Props) => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm<Suscripcion>({
     defaultValues: entity,
   });
@@ -28,6 +30,7 @@ const SuscripcionForm = ({ onSubmit, isSubmitting, entity,planes,sujetos }: Prop
     onSubmit(data);
   };  
   return (
+    <div>
     <form onSubmit={handleSubmit(handleFormSubmit)}>
      <div>
         <label htmlFor="idCuenta">Cuenta:</label>
@@ -77,6 +80,14 @@ const SuscripcionForm = ({ onSubmit, isSubmitting, entity,planes,sujetos }: Prop
         {submitText}
       </button>
     </form>
+    <div>
+      <ul>
+        {errorList.map(item => (
+          <li key={item.key}>{item.message}</li>
+        ))}
+      </ul>
+      </div>
+    </div>
   );
 };
 

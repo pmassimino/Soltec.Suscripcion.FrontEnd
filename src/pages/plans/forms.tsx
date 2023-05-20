@@ -1,14 +1,16 @@
 import { useState, useEffect, RefCallback, useCallback } from 'react';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
 import { Plan } from '../../models/model';
+import { ErrorItem } from '@/utils/errors';
 
 interface Props {
   onSubmit: (entity: Plan) => Promise<void>;
   isSubmitting: boolean;
   entity?: Plan;
+  errorList:ErrorItem[];
 }
 
-const PlanForm = ({ onSubmit, isSubmitting, entity }: Props) => {
+const PlanForm = ({ onSubmit, isSubmitting, entity,errorList }: Props) => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm<Plan>({
     defaultValues: entity,
   });
@@ -24,6 +26,7 @@ const PlanForm = ({ onSubmit, isSubmitting, entity }: Props) => {
     onSubmit(data);
   };  
   return (
+    <div>
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <div>
         <label htmlFor="nombre">Nombre:</label>
@@ -37,7 +40,15 @@ const PlanForm = ({ onSubmit, isSubmitting, entity }: Props) => {
       <button type="submit" disabled={isSubmitting}>
         {submitText}
       </button>
-    </form>
+    </form>    
+    <div>
+    <ul>
+      {errorList.map(item => (
+        <li key={item.key}>{item.message}</li>
+      ))}
+    </ul>
+    </div>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import {getToken} from '../services/auth'
+import BackEndError, { ErrorItem } from "@/utils/errors";
 
 interface ApiError {
   message: string;
@@ -20,9 +21,18 @@ class ApiService {
       headers,
       ...options,
     });   
-    if (!response.ok) {
-      const errorData: ApiError = await response.json();
-      throw new Error(JSON.stringify(errorData));
+    if (response.status === 400 ) {
+      //const errorData: ApiError = await response.json();
+      //throw new Error(JSON.stringify(errorData));
+      const errorData = await response.json();
+        const errorList: ErrorItem[] = Object.entries(errorData)
+          .flatMap(([key, value]) => {
+            if (typeof value === 'string') {
+              return { key, message: value } as ErrorItem;
+            }
+            return [];
+          });
+          throw new BackEndError('Error de Backend', errorList);
     }
     const data = await response.json();
     if (response.ok) {      

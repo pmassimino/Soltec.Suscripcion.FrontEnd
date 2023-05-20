@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ApiService from "../../services/apiService";
-import { Plan, Sujeto, Suscripcion } from '../../models/model';
+import { Plan, Sujeto, Suscripcion, } from '../../models/model';
 import Layout from '@/componets/Layout';
 import { withAuth } from '@/componets/withAuth/withAuth';
 import SuscripcionForm from './forms';
-import suscripciones from '.';
+import BackEndError, { ErrorItem } from '@/utils/errors';
+
+
 
 const SuscripcionCreate = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [planes, setPlanes] = useState<Plan[]>();
-  const [sujetos, setSujetos] = useState<Sujeto[]>();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [sujetos, setSujetos] = useState<Sujeto[]>();  
+  const [errorList, setErrorList] = useState<ErrorItem[]>([]);
   useEffect(() => {
     const apiUrl = process.env.API_URL ?? '';
     const apiService = new ApiService(apiUrl);
@@ -49,14 +51,9 @@ const SuscripcionCreate = () => {
     try {
       newEntity = await apiService.post<Suscripcion>("/suscripcion", entity);
       router.push(`/suscripciones/${newEntity.id}/details`);
-    } catch (error) {
-      // Manejo del error
-      console.error(error);
-      if (error instanceof Error) {  
-        const jsonObject = JSON.parse(error.message);
-        const errorValue = Object.values(jsonObject)[0];         
-        setErrorMessage(errorValue as string);
-      }
+    } catch (error ) {
+      if (error instanceof BackEndError)            
+         setErrorList(error.errors);          
     }
     setIsSubmitting(false);
   };
@@ -72,8 +69,7 @@ const SuscripcionCreate = () => {
     <>
     <Layout title='Crear Nuevo '>
       <h1>Crear nueva suscripcion</h1>
-      <SuscripcionForm onSubmit={handleSubmit} planes={planes}  entity={initialValue} sujetos={sujetos} isSubmitting={isSubmitting} />
-      {errorMessage && <p>{errorMessage}</p>}
+      <SuscripcionForm onSubmit={handleSubmit} planes={planes}  entity={initialValue} sujetos={sujetos} isSubmitting={isSubmitting} errorList={errorList} />      
       </Layout>
     </>
   );

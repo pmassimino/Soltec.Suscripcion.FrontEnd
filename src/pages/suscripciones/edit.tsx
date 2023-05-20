@@ -5,6 +5,7 @@ import { Plan, Sujeto, Suscripcion } from '../../models/model';
 import Layout from '@/componets/Layout';
 import { withAuth } from '@/componets/withAuth/withAuth';
 import SuscripcionForm from './forms';
+import BackEndError, { ErrorItem } from '@/utils/errors';
 
 interface EditProps {
   id: string;
@@ -16,7 +17,7 @@ const SuscripcionEdit = ({ id }: EditProps) => {
   const [entity, setEntity] = useState<Suscripcion>();
   const [planes, setPlanes] = useState<Plan[]>();
   const [sujetos, setSujetos] = useState<Sujeto[]>();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorList, setErrorList] = useState<ErrorItem[]>([]);
 
   useEffect(() => {
     const apiUrl = process.env.API_URL ?? '';
@@ -63,11 +64,8 @@ const SuscripcionEdit = ({ id }: EditProps) => {
       await apiService.put<Suscripcion>(`/suscripcion/${id}`, entity);
       router.push(`/suscripciones/`);
     } catch (error) {
-      if (error instanceof Error) {  
-        const jsonObject = JSON.parse(error.message);
-        const errorValue = Object.values(jsonObject)[0];         
-        setErrorMessage(errorValue as string);
-      }
+      if (error instanceof BackEndError)            
+         setErrorList(error.errors);    
     }
     setIsSubmitting(false);
   };
@@ -80,8 +78,7 @@ const SuscripcionEdit = ({ id }: EditProps) => {
     <>
       <Layout title='Editar Suscripcion'>
         <h1>Editar</h1>
-        <SuscripcionForm entity={entity} planes={planes} sujetos={sujetos} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
-        {errorMessage && <p>{errorMessage}</p>}
+        <SuscripcionForm entity={entity} planes={planes} sujetos={sujetos} onSubmit={handleSubmit} isSubmitting={isSubmitting} errorList={errorList} />        
       </Layout>
     </>
   );

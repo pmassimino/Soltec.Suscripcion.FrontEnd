@@ -1,3 +1,5 @@
+
+import { ErrorItem } from '@/utils/errors';
 import router from 'next/router';
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
@@ -10,16 +12,9 @@ const Register = () => {
     watch,
   } = useForm();
 
-  interface ErrorItem {
-    key: string;
-    message: string;
-  }
-  interface ErrorList {
-    errors: ErrorItem[];
-  }
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [errorList, setErrorList] = useState<ErrorList>({ errors: [] });
+  const [errorList, setErrorList] = useState<ErrorItem[]>( [] );
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const apiUrl = process.env.API_URL ?? '';
@@ -44,7 +39,7 @@ const Register = () => {
             }
             return [];
           });
-        setErrorList({ errors: errorList });
+        setErrorList(errorList );
       }
     } catch (error) {
       console.error('Error en la llamada a la API:', error);
@@ -91,7 +86,7 @@ const Register = () => {
         <button type="submit">Registrarse</button>
       </form>
       <ul>
-        {errorList.errors.map((errorItem) => (
+        {errorList.map((errorItem) => (
           <li key={errorItem.key}>{errorItem.message}</li>
         ))}
       </ul>

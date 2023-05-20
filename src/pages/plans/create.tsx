@@ -5,10 +5,12 @@ import { Plan } from '../../models/model';
 import PlanForm from './forms';
 import Layout from '@/componets/Layout';
 import { withAuth } from '@/componets/withAuth/withAuth';
+import BackEndError, { ErrorItem } from '@/utils/errors';
 
 const PlanCreate = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorList, setErrorList] = useState<ErrorItem[]>([]);
 
   const handleSubmit = async (plan: Plan) => {
     const apiUrl = process.env.API_URL ?? '';
@@ -20,8 +22,8 @@ const PlanCreate = () => {
       newPlan = await apiService.post<Plan>("/plan", plan);
       router.push(`/plans/${newPlan.id}/details`);
     } catch (error) {
-      // Manejo del error
-      console.error(error);
+      if (error instanceof BackEndError)            
+      setErrorList(error.errors);  
     }
     setIsSubmitting(false);
   };
@@ -30,7 +32,7 @@ const PlanCreate = () => {
     <>
     <Layout title='Crear Nuevo Plan'>
       <h1>Crear nuevo plan</h1>
-      <PlanForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+      <PlanForm onSubmit={handleSubmit} isSubmitting={isSubmitting} errorList={errorList} />      
       </Layout>
     </>
   );
