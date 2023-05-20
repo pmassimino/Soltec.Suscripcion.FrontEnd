@@ -10,13 +10,29 @@
   },
   "dependencies": {
     "@types/node": "18.15.11",
-    "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
+    "@types/react-modal": "^3.16.0",
+    "axios": "^1.3.5",
+    "axios-mapper": "^0.5.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
+    "jsonwebtoken": "^9.0.0",
+    "jwt-decode": "^3.1.2",
     "next": "13.2.4",
-    "react": "18.2.0",
+    "node-fetch": "^3.3.1",
+    "react": "^18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
+    "react-modal": "^3.16.1",
     "typescript": "5.0.2"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.5.1",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/react": "^18.0.33",
+    "css-loader": "^6.7.3",
+    "style-loader": "^3.3.2"
   }
 }
