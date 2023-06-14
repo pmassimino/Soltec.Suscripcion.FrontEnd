@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import ApiService from "../../services/apiService";
-import { Suscripcion } from "@/models/model";
+import { Suscripcion, SuscripcionView } from "@/models/model";
 import { withAuth } from "@/componets/withAuth/withAuth";
 import Layout from "@/componets/Layout";
 import Link from "next/link";
+import BackEndError, { ErrorItem } from "@/utils/errors";
 
 
 const SuscripcionIndex = () => {
-  const [entities, setEntities] = useState<Suscripcion[]>([]);
+  const [entities, setEntities] = useState<SuscripcionView[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [errorList, setErrorList] = useState<ErrorItem[]>([]);
   
   const filteredEntities = entities.filter((p) =>
   p.nombre && p.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -18,10 +20,31 @@ const SuscripcionIndex = () => {
     setSearchTerm(event.target.value);
   };
 
-  useEffect(() => {
+  const handleDelete = async (data: Suscripcion) => {     
+    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar esta cuenta?');
+    if (!confirmDelete) {
+      return;
+    }
+      const apiUrl = process.env.API_URL ?? '';    
+      const apiService = new ApiService(apiUrl);      
+      try {        
+        await apiService.delete<Suscripcion>('/suscripcion/' + data.id  ,null);
+        fetchEntities();      
+      } catch (error ) {
+        if (error instanceof BackEndError)            
+           setErrorList(error.errors);          
+      }      
+    };
+
+  const fetchEntities = ()=>
+  {
     const apiUrl  = process.env.API_URL ?? '';
     const apiService = new ApiService(apiUrl);
-    apiService.get<Suscripcion[]>("/suscripcion/view").then((data) => setEntities(data));
+    apiService.get<SuscripcionView[]>("/suscripcion/view").then((data) => setEntities(data));
+  }
+
+  useEffect(() => {
+    fetchEntities();
     const storedSearchValue = localStorage.getItem("searchTermSuscripçion");
     if (storedSearchValue) {
       setSearchTerm(storedSearchValue);
@@ -46,7 +69,7 @@ const SuscripcionIndex = () => {
       <div>
       <Link href="/suscripciones/create">
         Crear nueva
-      </Link>
+      </Link>      
       </div>
     <table>
   <thead>
@@ -57,6 +80,7 @@ const SuscripcionIndex = () => {
       <th>Plan</th>
       <th>Importe</th>
       <th>Estado</th>
+      <td></td>
       <td></td>
     </tr>
   </thead>
@@ -69,7 +93,8 @@ const SuscripcionIndex = () => {
         <td>{entity.plan}</td>
         <td>{entity.importe}</td>
         <td>{entity.estado}</td>
-        <td><a href={`/suscripciones/${entity.id}/details`}>Detalle</a></td>
+        <td><a href={`/suscripciones/${entity.id}`}>Editar</a></td> 
+        <td><button onClick={() => handleDelete(entity)}>Eliminar</button></td>                     
       </tr>
     ))}
   </tbody>

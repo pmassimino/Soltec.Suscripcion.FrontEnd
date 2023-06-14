@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 import ApiService from "../../services/apiService";
-import { Plan } from "@/models/model";
+import { Usuario } from "@/models/model";
 import { withAuth } from "@/componets/withAuth/withAuth";
 import Layout from "@/componets/Layout";
 import Link from "next/link";
+import router from "next/router";
 import BackEndError, { ErrorItem } from "@/utils/errors";
 import ErrorList from "@/componets/errorList";
 
 
-const PlanIndex = () => {
-  const [entities, setEntities] = useState<Plan[]>([]);
+const UsuarioIndex = () => {
+  const [entities, setEntities] = useState<Usuario[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [errorList, setErrorList] = useState<ErrorItem[]>([]);
-  const apiUrl = process.env.API_URL ?? '';    
-  const apiService = new ApiService(apiUrl);      
+  const [errorList,setErrorList] = useState<ErrorItem[]>([])
   
   const filteredEntities = entities.filter((p) =>
   p.nombre && p.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -22,40 +21,46 @@ const PlanIndex = () => {
   const handleSearchFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
-  const handleDelete = async (data: Plan) => {     
+
+  const handleDelete = async (data: Usuario) => {     
     const confirmDelete = confirm('¿Estás seguro de que deseas eliminar esta cuenta?');
     if (!confirmDelete) {
       return;
-    }     
+    }
+      const apiUrl = process.env.API_URL ?? '';    
+      const apiService = new ApiService(apiUrl);
+      let newEntity: Usuario;
       try {        
-        await apiService.delete<Plan>('/plan/' + data.id  ,null);
-        fetchPlan();        
+        newEntity = await apiService.delete<Usuario>('/usuario/' + data.id  ,data);
+        fetchUsuarios();
+        router.push(`/usuarios/`);
       } catch (error ) {
         if (error instanceof BackEndError)            
            setErrorList(error.errors);          
       }      
     };
 
-const fetchPlan = (()=>
-{
-  apiService.get<Plan[]>("/plan").then((data) => setEntities(data));
-});
-
-  useEffect(() => {        
-    fetchPlan();
-    const storedSearchValue = localStorage.getItem("searchTerm");
+  const fetchUsuarios = ()=>
+  {
+    const apiUrl  = process.env.API_URL ?? '';
+    const apiService = new ApiService(apiUrl);
+    apiService.get<Usuario[]>("/usuario/").then((data) => setEntities(data));
+  }  
+  useEffect(() => {
+    fetchUsuarios();
+    const storedSearchValue = localStorage.getItem("searchTermUsuario");
     if (storedSearchValue) {
       setSearchTerm(storedSearchValue);
     }
   }, []);
   //cuando cambia actualizar busqueda
   useEffect(() => {
-    localStorage.setItem("searchTerm", searchTerm);
+    localStorage.setItem("searchTermUsuario", searchTerm);
   }, [searchTerm]);
 
   return (
-    <Layout title='Planes'>
-      <h1>Planes</h1>
+    <Layout title='Usuarios'>
+      <h1>Usuarios</h1>
       <div>
       <input
         type="text"
@@ -63,17 +68,15 @@ const fetchPlan = (()=>
         value={searchTerm}
         onChange={handleSearchFilterChange}
       />
-      </div>
-      <div>
-      <Link href="/plans/create">
-        Crear nuevo plan
-      </Link>
-      </div>
+      </div>  
+      <ErrorList errorList={errorList}></ErrorList>   
     <table>
   <thead>
     <tr>
-      <th>Id</th>
+      <td>Id</td>      
       <th>Nombre</th>
+      <th>email</th>
+      <th>Estado</th>      
       <td></td>
       <td></td>
     </tr>
@@ -83,15 +86,16 @@ const fetchPlan = (()=>
       <tr key={entity.id}>
         <td>{entity.id}</td>
         <td>{entity.nombre}</td>
-        <td><a href={`/plans/${entity.id}`}>Editar</a></td>        
-        <td><button onClick={() => handleDelete(entity)}>Eliminar</button></td>
+        <td>{entity.email}</td>
+        <td>{entity.estado}</td>        
+        <td><a href={`/usuarios/${entity.id}/cuentas`}>Cuentas</a></td>
+        <td><button onClick={() => handleDelete(entity)}>Eliminar</button></td>              
       </tr>
-    ))}    
+    ))}
   </tbody>
 </table>
-<ErrorList errorList={errorList}></ErrorList>
-</Layout>
+    </Layout>
   );
 };
 
-export default withAuth(PlanIndex);
+export default withAuth(UsuarioIndex);

@@ -1,5 +1,5 @@
 {
-  "name": "mi-proyecto",
+  "name": "soltec.suscripcion.frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -26,6 +26,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-modal": "^3.16.1",
+    "react-router-dom": "^6.11.2",
     "typescript": "5.0.2"
   },
   "devDependencies": {

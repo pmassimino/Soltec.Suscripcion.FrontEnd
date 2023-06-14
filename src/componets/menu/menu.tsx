@@ -37,6 +37,11 @@ const Menu: React.FC<MenuProps> = ({ isAuthenticated, logout }) => (
           Suscripciones
         </Link>
       </li>
+      <li>
+        <Link href="/usuarios">
+          Usuarios
+        </Link>
+      </li>
       {isAuthenticated && (
         <li>
           <Link href="" onClick={logout}>Logout</Link>

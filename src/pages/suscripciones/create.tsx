@@ -50,7 +50,7 @@ const SuscripcionCreate = () => {
     let newEntity: Suscripcion;
     try {
       newEntity = await apiService.post<Suscripcion>("/suscripcion", entity);
-      router.push(`/suscripciones/${newEntity.id}/details`);
+      router.push(`/suscripciones/`);
     } catch (error ) {
       if (error instanceof BackEndError)            
          setErrorList(error.errors);          

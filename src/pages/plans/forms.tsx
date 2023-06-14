@@ -2,6 +2,7 @@ import { useState, useEffect, RefCallback, useCallback } from 'react';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
 import { Plan } from '../../models/model';
 import { ErrorItem } from '@/utils/errors';
+import ErrorList from '@/componets/errorList';
 
 interface Props {
   onSubmit: (entity: Plan) => Promise<void>;
@@ -41,13 +42,7 @@ const PlanForm = ({ onSubmit, isSubmitting, entity,errorList }: Props) => {
         {submitText}
       </button>
     </form>    
-    <div>
-    <ul>
-      {errorList.map(item => (
-        <li key={item.key}>{item.message}</li>
-      ))}
-    </ul>
-    </div>
+    <ErrorList errorList={errorList}></ErrorList>
     </div>
   );
 };

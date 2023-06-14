@@ -35,13 +35,35 @@ export interface Sujeto {
   export interface SuscripcionView {
     id: number
     idCuenta: string
-    cuenta:string
+    nombre:string
     idPlan: number
     plan:string
     estado: string
     importe: number
   }
   
+  export interface Usuario {
+    id: number
+    nombre: string
+    email: string
+    estado: string
+    roles: Role[]
+    cuentas: UsuarioCuenta[]
+  }
+  
+  export interface Role {
+    idUsuario: number
+    idRol: number
+    rol: any
+    usuario: any
+  }
+  
+  export interface UsuarioCuenta {
+    idUsuario: number
+    idCuenta: string   
+    usuario: Usuario | null;  
+    nombre:string
+  }
   
   
   

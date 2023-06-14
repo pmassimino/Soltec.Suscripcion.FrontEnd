@@ -3,9 +3,7 @@ import { useRouter } from 'next/router';
 import { getToken,isTokenExpired,isAdmin } from '../../services/auth';
 
 interface Props {
-  // Define aquí los atributos que espera tu componente.
-  // Por ejemplo, si tu componente espera una prop `title` de tipo `string`, puedes definirlo así:
-  title: string;
+  
 }
 
 export function withAuth<P extends Props>(Component: React.ComponentType<P>) {

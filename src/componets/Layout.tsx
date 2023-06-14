@@ -11,7 +11,7 @@ type LayoutProps = {
 
 function Layout({ children, title = "" }: LayoutProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     const token = getToken();
     setIsAuthenticated(!!token); // !! convierte el valor en un booleano
@@ -19,8 +19,7 @@ function Layout({ children, title = "" }: LayoutProps) {
 
   function handleLogout() {
     // código para cerrar sesión
-    setToken("");
-    const router = useRouter();
+    setToken("");    
     router.replace("/login");
   }
 

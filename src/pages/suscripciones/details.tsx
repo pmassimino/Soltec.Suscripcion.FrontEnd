@@ -26,7 +26,7 @@ const SuscripcionDetails = ({ id }: Props) => {
 
     const apiService = new ApiService(apiUrl);
     try {
-      await apiService.delete(`/suscripcion/${id}`);
+      await apiService.delete(`/suscripcion/${id}`,null);
       router.push('/suscripciones');
     } catch (error) {     
       if (error instanceof Error) {  

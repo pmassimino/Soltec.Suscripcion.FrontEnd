@@ -1,10 +1,15 @@
 
 import { ErrorItem } from '@/utils/errors';
-import router from 'next/router';
+import Link from "next/link";
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
-const Register = () => {
+
+interface RegisterOk {
+  onSubmitMail: (email: string) => void;
+}
+
+const RegisterForm = ({onSubmitMail}:RegisterOk) => {
   const {
     register,
     handleSubmit,
@@ -29,7 +34,10 @@ const Register = () => {
       });
 
       if (response.ok) {
-        router.push('/login');
+        const data:RegisterOk =  await response.json();
+        const email = watch('email');
+        onSubmitMail(email);
+        //router.push('/login');
       } else if (response.status === 400) {
         const errorData = await response.json();
         const errorList: ErrorItem[] = Object.entries(errorData)
@@ -93,5 +101,41 @@ const Register = () => {
     </div>
   );
 };
+interface RegisterOkProps {
+  email: string;
+}
+
+const RegisterOk = ({ email }: RegisterOkProps) => {
+  return (
+    <div>
+      <h1>Registro Exitoso</h1>
+      <p>¡Se ha registrado correctamente con el siguiente email:</p>
+      <p>{email}</p>
+      <p>Revise su cuenta de correo para activar su cuenta</p>
+      <p>¡Gracias por registrarse!</p>
+      <p><Link href="/login">Login Page</Link></p>
+    </div>
+  );
+};
+
+const Register = () => {
+  const [registeredEmail, setRegisteredEmail] = useState("");
+
+  const handleRegister = (email:string) =>   {
+    // Realizar el registro del usuario    // ...
+    setRegisteredEmail(email);
+  };
+
+  return (
+    <div>
+      {registeredEmail ? (
+        <RegisterOk email={registeredEmail} />
+      ) : (
+        <RegisterForm onSubmitMail={handleRegister}></RegisterForm>
+      )}
+    </div>
+  );
+};
 
 export default Register;
+

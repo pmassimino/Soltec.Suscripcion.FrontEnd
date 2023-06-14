@@ -5,7 +5,7 @@ import SuscripcionEdit from './edit';
 
 const SuscripcionEditPage = () => {
   const router = useRouter();
-  const id = router.query.id?.[0];
+  const id = router.query.id as string;
 
   if (!id) {
     return <div>Cargando...</div>;
