@@ -47,7 +47,7 @@ const fetchPlan = (()=>
     if (storedSearchValue) {
       setSearchTerm(storedSearchValue);
     }
-  }, []);
+  },[]);
   //cuando cambia actualizar busqueda
   useEffect(() => {
     localStorage.setItem("searchTerm", searchTerm);

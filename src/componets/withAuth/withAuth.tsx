@@ -21,7 +21,7 @@ export function withAuth<P extends Props>(Component: React.ComponentType<P>) {
       else if (!isAdmin()) {
         router.push('/unauthorized'); // Redirige al componente Unauthorized si el usuario no es administrador
       }
-    }, []);
+    }, [router]);
 
     return <Component {...props} />;
   };

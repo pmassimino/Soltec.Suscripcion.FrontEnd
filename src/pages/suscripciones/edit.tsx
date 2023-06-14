@@ -4,7 +4,7 @@ import ApiService from "../../services/apiService";
 import { Plan, Sujeto, Suscripcion } from '../../models/model';
 import Layout from '@/componets/Layout';
 import { withAuth } from '@/componets/withAuth/withAuth';
-import SuscripcionForm from './forms';
+import SuscripcionForm from '../../componets/suscripciones/forms';
 import BackEndError, { ErrorItem } from '@/utils/errors';
 
 interface EditProps {

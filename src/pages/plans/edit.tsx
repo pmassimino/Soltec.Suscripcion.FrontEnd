@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ApiService from "../../services/apiService";
 import { Plan } from '../../models/model';
-import PlanForm from './forms';
+import PlanForm from '../../componets/plans/forms';
 import Layout from '@/componets/Layout';
 import { withAuth } from '@/componets/withAuth/withAuth';
 import BackEndError, { ErrorItem } from '@/utils/errors';

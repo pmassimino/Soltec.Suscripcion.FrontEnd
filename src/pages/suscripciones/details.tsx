@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ApiService from "@/services/apiService";
 import { Suscripcion } from '@/models/model';
-import SuscripcionForm from './forms';
+import SuscripcionForm from '../../componets/suscripciones/forms';
 import Layout from '@/componets/Layout';
 
 type Props = {

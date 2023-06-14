@@ -4,7 +4,7 @@ import Layout from '@/componets/Layout';
 import { withAuth } from '@/componets/withAuth/withAuth';
 import BackEndError, { ErrorItem } from '@/utils/errors';
 import { Sujeto, UsuarioCuenta } from '@/models/model';
-import AddCuentaForm from '../addCuentaForm';
+import AddCuentaForm from '../../../componets/usuarios/addCuentaForm';
 import ApiService from '@/services/apiService';
 
 

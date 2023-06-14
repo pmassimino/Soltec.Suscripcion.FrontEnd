@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ApiService from "@/services/apiService";
 import { Plan } from '@/models/model';
-import PlanForm from './forms';
+import PlanForm from '../../componets/plans/forms';
 import Layout from '@/componets/Layout';
 import BackEndError, { ErrorItem } from '@/utils/errors';
 import ErrorList from '@/componets/errorList';
