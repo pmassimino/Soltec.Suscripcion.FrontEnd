@@ -15,7 +15,12 @@ const CuentasIndex = () => {
   const [errorList,setErrorList] = useState<ErrorItem[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false); // Nuevo estado para indicar si se está cargando la lista
   const router = useRouter();
-  const id = router.query.id?.[0];
+  //const id = router.query.id?.[0];
+  //const id = router.query.id?.[0]; // Puede ser una cadena o undefined
+  const id = router.query.id as string;
+
+  // Verificar si id es definido y no es null
+  const parsedId = id ? parseInt(id, 10) : undefined;
 
   const filteredEntities = entities.filter((p) =>
     p.nombre && p.nombre.toLowerCase().includes(searchTerm.toLowerCase())

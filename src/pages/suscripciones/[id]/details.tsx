@@ -4,7 +4,7 @@ import { withAuth } from '@/componets/withAuth/withAuth';
 
 const SuscripcionDetailsPage = () => {
   const router = useRouter();
-  const id = router.query.id?.[0];
+  const id = router.query.id as string;
 
   if (!id) {
     return <div>Cargando...</div>;

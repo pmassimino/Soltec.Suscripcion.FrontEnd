@@ -11,7 +11,7 @@ import ApiService from '@/services/apiService';
 
 const AddCuenta = () => {
   const router = useRouter();
-  const id = router.query.id?.[0];
+  const id = router.query.id as string;
   const [entity, setEntity] = useState<UsuarioCuenta>();
   const [sujetos, setSujetos] = useState<Sujeto[]>([]);
   const [errorList, setErrorList] = useState<ErrorItem[]>([]);
