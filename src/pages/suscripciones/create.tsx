@@ -38,8 +38,7 @@ const SuscripcionCreate = () => {
     };   
     fetchPlanes();
     fetchSujetos();
-  }, );
-
+  },[]);
   const handleSubmit = async (entity: Suscripcion) => {
     entity.idPlan= Number(entity.idPlan);
     entity.importe = Number(entity.importe);
