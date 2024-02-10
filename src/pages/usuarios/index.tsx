@@ -87,7 +87,8 @@ const UsuarioIndex = () => {
         <td>{entity.id}</td>
         <td>{entity.nombre}</td>
         <td>{entity.email}</td>
-        <td>{entity.estado}</td>        
+        <td>{entity.estado}</td>    
+        <td><a href={`/usuarios/${entity.id}`}>Editar</a></td>     
         <td><a href={`/usuarios/${entity.id}/cuentas`}>Cuentas</a></td>
         <td><button onClick={() => handleDelete(entity)}>Eliminar</button></td>              
       </tr>
