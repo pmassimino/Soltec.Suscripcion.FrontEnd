@@ -30,7 +30,8 @@ const SuscripcionCreate = () => {
     const fetchSujetos = async () => {
       try {
         const entity = await apiService.get<Sujeto[]>(`/sujeto`);
-        setSujetos(entity);
+        const entityOrdenados = entity.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        setSujetos(entityOrdenados);        
       } catch (error) {
         // Manejo del error        
         console.error(error);
