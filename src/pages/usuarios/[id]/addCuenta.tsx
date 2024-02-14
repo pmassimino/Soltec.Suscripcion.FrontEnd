@@ -31,7 +31,9 @@ const AddCuenta = () => {
     const fetchSujetos = async () => {
       try {
         const entity = await apiService.get<Sujeto[]>(`/sujeto`);
-        setSujetos(entity);
+        // Ordenar los sujetos por nombre
+        const entityOrdenados = entity.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        setSujetos(entityOrdenados);
       } catch (error) {
         // Manejo del error        
         console.error(error);
