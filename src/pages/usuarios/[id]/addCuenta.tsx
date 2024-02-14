@@ -38,7 +38,7 @@ const AddCuenta = () => {
       }
     };       
     fetchSujetos();
-  }, );
+  },[]);
 
   const handleSubmit = async (data: UsuarioCuenta) => {     
     const apiUrl = process.env.API_URL ?? '';    
